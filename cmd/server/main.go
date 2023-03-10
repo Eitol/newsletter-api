@@ -22,6 +22,7 @@ func main() {
 	libGroup := r.Group("/newsletter")
 	subscriptionsGroup := libGroup.Group("/subscriptions")
 	subscriptionsGroup.GET("", newsletterHandler.Get)
+	subscriptionsGroup.POST("", newsletterHandler.Post)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
