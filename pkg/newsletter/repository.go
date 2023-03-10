@@ -15,4 +15,11 @@ type Repository interface {
 		limit int,
 		offset int,
 	) ([]*Subscription, error)
+
+	Create(
+		ctx context.Context,
+		userID uuid.UUID,
+		blogID uuid.UUID,
+		interests []Interest,
+	) (uuid.UUID, error)
 }
