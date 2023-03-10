@@ -1,11 +1,10 @@
 package main
 
 import (
+	"github.com/Eitol/newsletter-api/pkg/newsletter/delivery/httpserver"
+	"log"
 	"os"
-
-	"github.com/Eitol/newsletter-api/pkg/cors"
-	"github.com/Eitol/newsletter-api/pkg/newsletter/handler"
-	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 // @contact.name                Grupo MContigo
@@ -13,22 +12,13 @@ import (
 // @version                     1.0
 // @description                 Newsletter API
 func main() {
-	r := gin.Default()
-
-	r.Use(cors.AllowCORS())
-
-	newsletterHandler := handler.Build()
-
-	libGroup := r.Group("/newsletter")
-	subscriptionsGroup := libGroup.Group("/subscriptions")
-	subscriptionsGroup.GET("", newsletterHandler.Get)
-	subscriptionsGroup.POST("", newsletterHandler.Post)
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	portStr := os.Getenv("PORT")
+	if portStr == "" {
+		portStr = "8080"
 	}
-	err := r.Run(":" + port)
+	port, err := strconv.Atoi(portStr)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error converting port to int: %v", err)
 	}
+	httpserver.RunHttpServer(port)
 }
