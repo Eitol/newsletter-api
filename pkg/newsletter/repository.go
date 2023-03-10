@@ -6,6 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
+type SearchResult struct {
+	Subscriptions []*Subscription
+	Total         int
+	Pages         int
+}
+
 type Repository interface {
 	Search(
 		ctx context.Context,
@@ -14,7 +20,7 @@ type Repository interface {
 		interests []Interest,
 		limit int,
 		offset int,
-	) ([]*Subscription, error)
+	) (*SearchResult, error)
 
 	Create(
 		ctx context.Context,

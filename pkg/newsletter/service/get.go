@@ -9,9 +9,24 @@ import (
 
 func (s *service) Get(
 	ctx context.Context,
-	UserID uuid.UUID,
-	BlogID uuid.UUID,
-	Interests []newsletter.Interest,
+	userID uuid.UUID,
+	blogID uuid.UUID,
+	interests []newsletter.Interest,
+	page int,
+	maxPageSize int,
 ) (*newsletter.Result[*newsletter.Subscription], error) {
-	panic("implement me")
+	limit := maxPageSize
+	offset := (page - 1) * maxPageSize
+	r, err := s.repo.Search(ctx, userID, blogID, interests, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	return &newsletter.Result[*newsletter.Subscription]{
+		Total: r.Total,
+		Pages: r.Pages,
+		Page: newsletter.Page[*newsletter.Subscription]{
+			Number:   page,
+			Elements: r.Subscriptions,
+		},
+	}, nil
 }

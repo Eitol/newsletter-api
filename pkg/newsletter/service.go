@@ -9,9 +9,11 @@ import (
 type Service interface {
 	Get(
 		ctx context.Context,
-		UserID uuid.UUID,
-		BlogID uuid.UUID,
-		Interests []Interest,
+		userID uuid.UUID,
+		blogID uuid.UUID,
+		interests []Interest,
+		page int,
+		maxPageSize int,
 	) (*Result[*Subscription], error)
 
 	Post(
