@@ -1,0 +1,29 @@
+# NOTE: to list all tasks, run `task -a`
+#
+version: "3"
+
+tasks:
+  test:
+    cmds:
+      - gotestsum --hide-summary=skipped --format pkgname -- -count=1 ./...
+  lint:
+    cmds:
+      - cmd: golangci-lint run --timeout 5m0s -E gocyclo -E funlen -E lll ./...
+        ignore_error: true
+      - gofumpt -w .
+  docs:
+    cmds:
+      - swag init -g cmd/server/main.go --outputTypes yaml --output docs
+  install:
+    cmds:
+      - go mod vendor
+      - go install gotest.tools/gotestsum@latest
+      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.50.1
+      - go install mvdan.cc/gofumpt@latest
+      - go install github.com/swaggo/swag/cmd/swag@latest
+      - go install github.com/google/wire/cmd/wire@latest
+  run:
+    cmds:
+      - go mod vendor
+      - wire ./...
+      - go run cmd/server/main.go

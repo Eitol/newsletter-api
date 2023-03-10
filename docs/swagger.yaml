@@ -1,0 +1,110 @@
+definitions:
+  handler.FilterDoc:
+    properties:
+      blogId:
+        example: b4f2e2d9-e399-46d0-a458-ef75527896c1
+        type: string
+      interests:
+        example:
+        - tech
+        - sports
+        items:
+          type: string
+        type: array
+      userId:
+        example: e020e7f8-79e6-4d16-80ce-7cbf86cefe1f
+        type: string
+    type: object
+  handler.PaginationDoc:
+    properties:
+      maxPageSize:
+        type: integer
+      numberOfPages:
+        type: integer
+      page:
+        type: integer
+      paginationString:
+        example: 1/1
+        type: string
+      totalElements:
+        type: integer
+    type: object
+  handler.ResponseDoc:
+    properties:
+      filter:
+        $ref: '#/definitions/handler.FilterDoc'
+      pagination:
+        $ref: '#/definitions/handler.PaginationDoc'
+      results:
+        items:
+          $ref: '#/definitions/handler.ResultsDoc'
+        type: array
+    type: object
+  handler.ResultsDoc:
+    properties:
+      blogId:
+        example: b4f2e2d9-e399-46d0-a458-ef75527896c1
+        type: string
+      interests:
+        example:
+        - tech
+        - sports
+        items:
+          type: string
+        type: array
+      userId:
+        example: e020e7f8-79e6-4d16-80ce-7cbf86cefe1f
+        type: string
+    type: object
+info:
+  contact:
+    name: Grupo MContigo
+  description: Newsletter API
+  title: Newsletter API
+  version: "1.0"
+paths:
+  /subscriptions:
+    get:
+      parameters:
+      - description: Result page
+        example: 1
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Max page size
+        example: 10
+        in: query
+        name: maxPageSize
+        required: true
+        type: integer
+      - description: User ID
+        example: "1"
+        in: query
+        name: userId
+        type: string
+      - description: Blog ID
+        example: "1"
+        in: query
+        name: blogId
+        type: string
+      - description: Interests
+        example: '["tech","sports"]'
+        in: query
+        items:
+          type: string
+        name: interests
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/handler.ResponseDoc'
+            type: array
+      summary: Read subscriptions
+      tags:
+      - subscriptions
+swagger: "2.0"
